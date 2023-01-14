@@ -1,8 +1,8 @@
 public class NormalBankAccount extends BankAccount{
 
-    public NormalBankAccount(String customerName, double balance, double FEE_PERCENTAGE) {
-        super(customerName,balance,FEE_PERCENTAGE);
-        FEE_PERCENTAGE = 0.1;
+    public NormalBankAccount(int accountNumber,String customerName, double balance) {
+        super(accountNumber,customerName,balance);
+        this.setFeePercentage(0.1);
     }
 }
 

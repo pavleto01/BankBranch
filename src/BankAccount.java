@@ -1,26 +1,20 @@
 public abstract class BankAccount implements BankOperations{
+    private int accountNumber;
     private String customerName;
     private double balance;
-    private double FEE_PERCENTAGE;
+    private double feePercentage;
 
-    /*public BankAccount(String customerName, double FEE_PERCENTAGE, double initialDeposit) {
-        this.customerName = customerName;
-        deposit(initialDeposit);
-    }*/
 
-    public BankAccount(String customerName, double balance, double FEE_PERCENTAGE) {
+    public BankAccount(int accountNumber, String customerName, double balance) {
+        this.accountNumber = accountNumber;
         this.customerName = customerName;
         this.balance = balance;
-        this.FEE_PERCENTAGE = FEE_PERCENTAGE;
     }
 
     public String getCustomerName() {
         return customerName;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
 
     @Override
     public double getBalance() {
@@ -31,20 +25,22 @@ public abstract class BankAccount implements BankOperations{
         this.balance = balance;
     }
 
-    public double getFEE_PERCENTAGE() {
-        return FEE_PERCENTAGE;
+
+    public void setFeePercentage(double feePercentage) {
+        this.feePercentage = feePercentage;
     }
 
-    public void setFEE_PERCENTAGE(double FEE_PERCENTAGE) {
-        this.FEE_PERCENTAGE = FEE_PERCENTAGE;
+    public int getAccountNumber() {
+        return accountNumber;
     }
+
 
     public void deposit(double amount) {
         balance += amount;
     }
 
     public void withdraw(double amount){
-        double fee = amount * FEE_PERCENTAGE;
+        double fee = amount * feePercentage;
         if (amount + fee > getBalance()) {
             System.out.println("Insufficient funds.");
         } else {
@@ -54,7 +50,7 @@ public abstract class BankAccount implements BankOperations{
     }
 
     public void withdrawAll(double amount) {
-        double fee = amount * FEE_PERCENTAGE;
+        double fee = amount * feePercentage;
         double withdrawnAmount = getBalance() - fee;
         System.out.println("Withdrew " + withdrawnAmount + " with a fee of " + fee);
     }

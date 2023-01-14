@@ -14,18 +14,28 @@ public class BankBranch {
         return instance;
     }
 
-    public void createAccount(String customerName, double balance, double FEE_PERCENTAGE, boolean isSpecial) {
+    public boolean isaccountNumberUnique(int accountNumber) {
+        for (int i = 0; i < accountCount; i++) {
+            if (accounts[i].getAccountNumber() == accountNumber) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void createAccount(int accountNumber,String customerName, double balance, boolean isSpecial) {
         BankAccount account;
         if (isSpecial) {
-            account = new SpecialBankAccount(customerName, balance, FEE_PERCENTAGE);
+            account = new SpecialBankAccount(accountNumber,customerName, balance);
         } else {
-            account = new NormalBankAccount(customerName, balance, FEE_PERCENTAGE);
+            account = new NormalBankAccount(accountNumber,customerName, balance);
         }
         accounts[accountCount++] = account;
     }
-    public int searchAccount(String customerName) {
+
+    public int searchAccount(int accountNumber) {
         for (int i = 0; i < accountCount; i++) {
-            if (accounts[i] != null && accounts[i].getCustomerName().equals(customerName)) {
+            if (accounts[i] != null && accounts[i].getAccountNumber()== accountNumber) {
                 return i;
             }
         }
@@ -60,11 +70,15 @@ public class BankBranch {
             System.out.println("Invalid account.");
         }
     }
+
+    private String typeOfAccount(boolean type) {
+        return type ? "Special" : "Normal";
+    }
+
     public void printAccount() {
         for (int i = 0; i < accountCount; i++) {
             if (accounts[i] != null) {
-                System.out.println("Account type: " + accounts[i].getClass().getName());
-                System.out.println("Account Index: " + i);
+                System.out.println("Account type: " + typeOfAccount(accounts[i] instanceof SpecialBankAccount));
                 System.out.println("Customer Name: " + accounts[i].getCustomerName());
                 System.out.println("Balance: " + accounts[i].getBalance());
                 System.out.println("-------------------");
