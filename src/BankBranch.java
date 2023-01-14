@@ -14,12 +14,12 @@ public class BankBranch {
         return instance;
     }
 
-    public void createAccount(String customerName, double initialDeposit, boolean isSpecial) {
+    public void createAccount(String customerName, double balance, double FEE_PERCENTAGE, boolean isSpecial) {
         BankAccount account;
         if (isSpecial) {
-            account = new SpecialBankAccount(customerName, initialDeposit);
+            account = new SpecialBankAccount(customerName, balance, FEE_PERCENTAGE);
         } else {
-            account = new NormalBankAccount(customerName, initialDeposit);
+            account = new NormalBankAccount(customerName, balance, FEE_PERCENTAGE);
         }
         accounts[accountCount++] = account;
     }
