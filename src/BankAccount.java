@@ -1,3 +1,5 @@
+
+
 public abstract class BankAccount implements BankOperations{
     private int accountNumber;
     private String customerName;
@@ -52,4 +54,8 @@ public abstract class BankAccount implements BankOperations{
         System.out.println("Withdrew " + withdrawnAmount + " with a fee of " + fee);
     }
 
+    @Override
+    public String toString() {
+        return "Customer: " + customerName +  "\n Account Number: " + accountNumber + "\n Balance: " + balance + "\n Fee Percentage: " + feePercentage*100 + "%";
+    }
 }
