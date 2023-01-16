@@ -11,9 +11,6 @@ public abstract class BankAccount implements BankOperations{
         this.balance = balance;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
 
 
     @Override
@@ -41,7 +38,7 @@ public abstract class BankAccount implements BankOperations{
 
     public void withdraw(double amount){
         double fee = amount * feePercentage;
-        if (amount + fee > getBalance()) {
+        if (amount + fee > balance) {
             System.out.println("Insufficient funds.");
         } else {
             setBalance(getBalance() - (amount + fee));
@@ -51,7 +48,7 @@ public abstract class BankAccount implements BankOperations{
 
     public void withdrawAll(double amount) {
         double fee = amount * feePercentage;
-        double withdrawnAmount = getBalance() - fee;
+        double withdrawnAmount = balance - fee;
         System.out.println("Withdrew " + withdrawnAmount + " with a fee of " + fee);
     }
 

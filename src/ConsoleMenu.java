@@ -12,6 +12,24 @@ public class ConsoleMenu {
         }
     }
 
+    private static void getCustomerAndAccount(final String[] customerName,final int[] accountNumber) {
+        do{
+            System.out.println("Enter customer name: ");
+            customerName[0] = scanner.nextLine();
+            if (!bankBranch.doesCustomerNameExist(customerName[0])) {
+                System.out.println("Customer name not found. Please try again.");
+            }
+        } while (!bankBranch.doesCustomerNameExist(customerName[0]));
+
+        do{
+            System.out.println("Enter account number: ");
+            accountNumber[0] = scanner.nextInt();
+            if (bankBranch.isAccountNumberUnique(accountNumber[0], customerName[0])) {
+                System.out.println("Account number not found. Please try again.");
+            }
+        } while (bankBranch.isAccountNumberUnique(accountNumber[0], customerName[0]));
+    }
+
     private static void printMenu() {
         System.out.println("1. Create Account");
         System.out.println("2. Remove Account");
@@ -31,15 +49,18 @@ public class ConsoleMenu {
 
 
     private static void createAccount() {
-        System.out.println("Enter account number: ");
-        int accountNumber = scanner.nextInt();
-        scanner.nextLine();
-        if (!bankBranch.isaccountNumberUnique(accountNumber)) {
-            System.out.println("Account number already exists. Please try again.");
-            return;
-        }
+
         System.out.println("Enter customer name: ");
         String customerName = scanner.nextLine();
+        int accountNumber;
+        do {
+            System.out.println("Enter account number: ");
+            accountNumber = scanner.nextInt();
+            if (!bankBranch.isAccountNumberUnique(accountNumber, customerName)) {
+                System.out.println("Account number already exists for this customer. Please try again.");
+            }
+        } while (!bankBranch.isAccountNumberUnique(accountNumber, customerName));
+
         System.out.println("Enter initial balance: ");
         double balance = scanner.nextDouble();
         scanner.nextLine();
@@ -55,43 +76,49 @@ public class ConsoleMenu {
     }
 
     private static void removeAccount() {
-        System.out.println("Enter account number: ");
-        int accountNumber = scanner.nextInt();
-        scanner.nextLine();
-        bankBranch.removeAccount(accountNumber);
+
+        final String[] customerName = new String[1];
+        final int[] accountNumber = new int[1];
+        getCustomerAndAccount(customerName, accountNumber);
+        bankBranch.removeAccount(accountNumber[0], customerName[0]);
         System.out.println("Account removed successfully!");
     }
 
     private static void deposit() {
-        System.out.println("Enter account number: ");
-        int accountNumber = scanner.nextInt();
-        scanner.nextLine();
+
+        final String[] customerName = new String[1];
+        final int[] accountNumber = new int[1];
+        getCustomerAndAccount(customerName, accountNumber);
         System.out.println("Enter amount to deposit: ");
         double amount = scanner.nextDouble();
         scanner.nextLine();
-        bankBranch.deposit(accountNumber, amount);
+        bankBranch.deposit(accountNumber[0],customerName[0], amount);
         System.out.println("Deposit successful!");
     }
 
     private static void withdraw() {
-        System.out.println("Enter account number: ");
-        int accountNumber = scanner.nextInt();
-        scanner.nextLine();
+
+        final String[] customerName = new String[1];
+        final int[] accountNumber = new int[1];
+        getCustomerAndAccount(customerName, accountNumber);
         System.out.println("Enter amount to withdraw: ");
         double amount = scanner.nextDouble();
         scanner.nextLine();
-        bankBranch.withdraw(accountNumber, amount);
+        bankBranch.withdraw(accountNumber[0],customerName[0], amount);
+        System.out.println("Withdraw successful!");
+
     }
 
     private static void checkBalance() {
-        System.out.println("Enter account number: ");
-        int accountNumber = scanner.nextInt();
-        scanner.nextLine();
-        bankBranch.checkBalance(accountNumber);
+
+        final String[] customerName = new String[1];
+        final int[] accountNumber = new int[1];
+        getCustomerAndAccount(customerName, accountNumber);
+        bankBranch.checkBalance(accountNumber[0],customerName[0]);
     }
 
     private static void printAllAccounts() {
-        bankBranch.printAllAccounts();
+        bankBranch.printAccounts();
     }
 
     private static void exit() {
