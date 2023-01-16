@@ -8,8 +8,10 @@ public class Validations {
         return !name.matches("^[a-zA-Z]+$");
     }
     public static boolean isValidAccountNumber(int accountNumber) {
-        // check if the account number is positive
-        return accountNumber <= 0;
+        if(accountNumber < 0)
+            return true;
+        String accountNumberString = String.valueOf(accountNumber);
+        return !accountNumberString.matches("^[0-9]+$");
     }
     public static boolean isValidBalance(double balance) {
         // check if the balance is positive
@@ -17,6 +19,6 @@ public class Validations {
     }
     public static boolean isValidAmount(double amount) {
         // check if the amount is positive
-        return amount <= 0;
+        return !(amount <= 0);
     }
 }

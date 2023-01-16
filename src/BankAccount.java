@@ -1,5 +1,3 @@
-
-
 public abstract class BankAccount implements BankOperations{
     private int accountNumber;
     private String customerName;

@@ -38,22 +38,7 @@ public class BankBranch {
     }
 
     public void createAccount(int accountNumber, String customerName, double balance, boolean isSpecial) {
-        if (Validations.isValidName(customerName)) {
-            System.out.println("Invalid customer name.");
-            return;
-        }
-        if (Validations.isValidAccountNumber(accountNumber)) {
-            System.out.println("Invalid account number.");
-            return;
-        }
-        if(!isAccountNumberUnique(accountNumber, customerName)) {
-            System.out.println("Account number already exists.");
-            return;
-        }
-        if (!Validations.isValidBalance(balance)) {
-            System.out.println("Invalid balance.");
-            return;
-        }
+
         BankAccount account;
         if (isSpecial) {
             account = new SpecialBankAccount(accountNumber, customerName, balance);
@@ -68,46 +53,28 @@ public class BankBranch {
 
 
     public void removeAccount(int accountNumber, String customerName) {
-        if (Validations.isValidName(customerName)) {
-            System.out.println("Invalid customer name.");
-            return;
-        }
-        if (Validations.isValidAccountNumber(accountNumber)) {
-            System.out.println("Invalid account number.");
-            return;
-        }
-        List<BankAccount> accountList = accounts.get(customerName);
 
-        for (BankAccount bankAccount : accountList) {
-            if (bankAccount.getAccountNumber() == accountNumber) {
-                accountList.remove(accountNumber);
-                return;
+        List<BankAccount> customerAccounts = accounts.get(customerName);
+        for (BankAccount account : customerAccounts) {
+            if (account.getAccountNumber() == accountNumber) {
+                customerAccounts.remove(account);
+                if(customerAccounts.isEmpty()){
+                    accounts.remove(customerName);
+                }
+                System.out.println("Account removed successfully!");
+                break;
             }
         }
-
     }
 
     public void deposit(int accountNumber, String customerName, double amount) {
-
-        if (Validations.isValidName(customerName)) {
-            System.out.println("Invalid customer name.");
-            return;
-        }
-        if (Validations.isValidAccountNumber(accountNumber)) {
-            System.out.println("Invalid account number.");
-            return;
-        }
-
-        if (Validations.isValidAmount(amount)) {
-            System.out.println("Invalid amount.");
-            return;
-        }
 
         List<BankAccount> accountList = accounts.get(customerName);
 
         for (BankAccount bankAccount : accountList) {
             if (bankAccount.getAccountNumber() == accountNumber) {
                 bankAccount.deposit(amount);
+                System.out.println("Deposit successful!");
                 return;
             }
         }
@@ -115,24 +82,13 @@ public class BankBranch {
     }
 
     public void withdraw(int accountNumber, String customerName, double amount) {
-        if (Validations.isValidName(customerName)) {
-            System.out.println("Invalid customer name.");
-            return;
-        }
-        if (Validations.isValidAccountNumber(accountNumber)) {
-            System.out.println("Invalid account number.");
-            return;
-        }
 
-        if (Validations.isValidAmount(amount)) {
-            System.out.println("Invalid amount.");
-            return;
-        }
         List<BankAccount> accountList = accounts.get(customerName);
 
         for (BankAccount bankAccount : accountList) {
             if (bankAccount.getAccountNumber() == accountNumber) {
                 bankAccount.withdraw(amount);
+                System.out.println("Withdraw successful!");
                 return;
             }
         }
@@ -141,14 +97,7 @@ public class BankBranch {
     }
 
     public void checkBalance(int accountNumber, String customerName) {
-        if (Validations.isValidName(customerName)) {
-            System.out.println("Invalid customer name.");
-            return;
-        }
-        if (Validations.isValidAccountNumber(accountNumber)) {
-            System.out.println("Invalid account number.");
-            return;
-        }
+
         List<BankAccount> accountList = accounts.get(customerName);
 
         for (BankAccount bankAccount : accountList) {

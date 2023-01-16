@@ -5,30 +5,14 @@ public class ConsoleMenu {
     private static BankBranch bankBranch = BankBranch.getInstance();
 
     public static void run() {
-        while (true) {
+        do {
             printMenu();
             int choice = getChoice();
             performAction(choice);
-        }
+        } while (true);
     }
 
-    private static void getCustomerAndAccount(final String[] customerName,final int[] accountNumber) {
-        do{
-            System.out.println("Enter customer name: ");
-            customerName[0] = scanner.nextLine();
-            if (bankBranch.doesCustomerNameExist(customerName[0])) {
-                System.out.println("Customer name not found. Please try again.");
-            }
-        } while (bankBranch.doesCustomerNameExist(customerName[0]));
 
-        do{
-            System.out.println("Enter account number: ");
-            accountNumber[0] = scanner.nextInt();
-            if (bankBranch.isAccountNumberUnique(accountNumber[0], customerName[0])) {
-                System.out.println("Account number not found. Please try again.");
-            }
-        } while (bankBranch.isAccountNumberUnique(accountNumber[0], customerName[0]));
-    }
 
     private static void printMenu() {
         System.out.println("1. Create Account");
@@ -47,23 +31,72 @@ public class ConsoleMenu {
         return choice;
     }
 
+    private static void getCustomerAndAccount(final String[] customerName,final int[] accountNumber) {
+        do{
+            System.out.println("Enter customer name: ");
+            customerName[0] = scanner.nextLine();
+            if (bankBranch.doesCustomerNameExist(customerName[0])) {
+                System.out.println("Customer name not found or invalid. Please try again.");
+            }
+        } while (bankBranch.doesCustomerNameExist(customerName[0]) || Validations.isValidName(customerName[0]));
+
+        do {
+            System.out.println("Enter account number: ");
+            if (scanner.hasNextInt()) {
+                accountNumber[0] = scanner.nextInt();
+                if (Validations.isValidAccountNumber(accountNumber[0])) {
+                    System.out.println("Account number is invalid or already exists. Please try again.");
+                } else {
+                    break;
+                }
+            } else {
+                System.out.println("Invalid account number. Please enter a positive integer.");
+                scanner.nextLine();
+            }
+        } while (true);
+    }
 
     private static void createAccount() {
-
-        System.out.println("Enter customer name: ");
-        String customerName = scanner.nextLine();
+        String customerName;
+        do {
+            System.out.println("Enter customer name: ");
+            customerName = scanner.nextLine();
+            if (Validations.isValidName(customerName)) {
+                System.out.println("Customer name is invalid. Please try again.");
+            }
+        } while (Validations.isValidName(customerName));
         int accountNumber;
         do {
             System.out.println("Enter account number: ");
-            accountNumber = scanner.nextInt();
-            if (!bankBranch.isAccountNumberUnique(accountNumber, customerName)) {
-                System.out.println("Account number already exists for this customer. Please try again.");
+            if (scanner.hasNextInt()) {
+                accountNumber = scanner.nextInt();
+                if (Validations.isValidAccountNumber(accountNumber) || !bankBranch.isAccountNumberUnique(accountNumber, customerName)) {
+                    System.out.println("Account number is invalid or already exists. Please try again.");
+                } else {
+                    break;
+                }
+            } else {
+                System.out.println("Invalid account number. Please enter a positive integer.");
+                scanner.nextLine();
             }
-        } while (!bankBranch.isAccountNumberUnique(accountNumber, customerName));
+        } while (true);
 
-        System.out.println("Enter initial balance: ");
-        double balance = scanner.nextDouble();
-        scanner.nextLine();
+        double balance;
+        do {
+            System.out.println("Enter balance: ");
+            if (scanner.hasNextDouble()) {
+                balance = scanner.nextDouble();
+                if (!Validations.isValidBalance(balance)) {
+                    System.out.println("Balance is invalid. Please try again.");
+                } else {
+                    break;
+                }
+            } else {
+                System.out.println("Invalid balance. Please enter a positive number.");
+                scanner.nextLine();
+            }
+        } while (true);
+
         int type;
         do {
             System.out.print("1: Normal Account, 2: Special Account: \n");
@@ -76,12 +109,11 @@ public class ConsoleMenu {
     }
 
     private static void removeAccount() {
-
         final String[] customerName = new String[1];
         final int[] accountNumber = new int[1];
         getCustomerAndAccount(customerName, accountNumber);
         bankBranch.removeAccount(accountNumber[0], customerName[0]);
-        System.out.println("Account removed successfully!");
+
     }
 
     private static void deposit() {
@@ -89,11 +121,23 @@ public class ConsoleMenu {
         final String[] customerName = new String[1];
         final int[] accountNumber = new int[1];
         getCustomerAndAccount(customerName, accountNumber);
-        System.out.println("Enter amount to deposit: ");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
+        double amount;
+        do {
+            System.out.println("Enter amount to deposit: ");
+            if (scanner.hasNextDouble()) {
+                amount = scanner.nextDouble();
+                if (Validations.isValidAmount(amount)) {
+                    System.out.println("Amount is invalid. Please try again.");
+                } else {
+                    break;
+                }
+            } else {
+                System.out.println("Invalid amount. Please enter a positive number.");
+                scanner.nextLine();
+            }
+        } while (true);
         bankBranch.deposit(accountNumber[0],customerName[0], amount);
-        System.out.println("Deposit successful!");
+
     }
 
     private static void withdraw() {
@@ -101,11 +145,23 @@ public class ConsoleMenu {
         final String[] customerName = new String[1];
         final int[] accountNumber = new int[1];
         getCustomerAndAccount(customerName, accountNumber);
-        System.out.println("Enter amount to withdraw: ");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
+        double amount;
+        do {
+            System.out.println("Enter amount to withdraw: ");
+            if (scanner.hasNextDouble()) {
+                amount = scanner.nextDouble();
+                if (Validations.isValidAmount(amount)) {
+                    System.out.println("Amount is invalid. Please try again.");
+                } else {
+                    break;
+                }
+            } else {
+                System.out.println("Invalid amount. Please enter a positive number.");
+                scanner.nextLine();
+            }
+        } while (true);
         bankBranch.withdraw(accountNumber[0],customerName[0], amount);
-        System.out.println("Withdraw successful!");
+
 
     }
 
@@ -128,32 +184,14 @@ public class ConsoleMenu {
 
     private static void performAction(int choice) {
         switch (choice) {
-            case 1:
-                createAccount();
-                break;
-            case 2:
-                removeAccount();
-                break;
-            case 3:
-                deposit();
-                break;
-            case 4:
-                withdraw();
-                break;
-            case 5:
-                checkBalance();
-                break;
-            case 6:
-                printAllAccounts();
-                break;
-            case 7:
-                exit();
-                break;
-            default:
-                System.out.println("Invalid choice.");
-                break;
+            case 1 -> createAccount();
+            case 2 -> removeAccount();
+            case 3 -> deposit();
+            case 4 -> withdraw();
+            case 5 -> checkBalance();
+            case 6 -> printAllAccounts();
+            case 7 -> exit();
+            default -> System.out.println("Invalid choice.");
         }
     }
-
-
 }
