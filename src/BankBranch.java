@@ -24,6 +24,18 @@ public class BankBranch {
     }
 
     public void createAccount(int accountNumber,String customerName, double balance, boolean isSpecial) {
+        if(accountNumber <= 0){
+            System.out.println("Invalid account number");
+            return;
+        }
+        if(customerName == null || customerName.trim().length() == 0){
+            System.out.println("Invalid customer name");
+            return;
+        }
+        if(balance < 0){
+            System.out.println("Invalid balance");
+            return;
+        }
         BankAccount account;
         if (isSpecial) {
             account = new SpecialBankAccount(accountNumber,customerName, balance);
