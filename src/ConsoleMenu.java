@@ -16,10 +16,10 @@ public class ConsoleMenu {
         do{
             System.out.println("Enter customer name: ");
             customerName[0] = scanner.nextLine();
-            if (!bankBranch.doesCustomerNameExist(customerName[0])) {
+            if (bankBranch.doesCustomerNameExist(customerName[0])) {
                 System.out.println("Customer name not found. Please try again.");
             }
-        } while (!bankBranch.doesCustomerNameExist(customerName[0]));
+        } while (bankBranch.doesCustomerNameExist(customerName[0]));
 
         do{
             System.out.println("Enter account number: ");
